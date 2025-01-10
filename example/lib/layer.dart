@@ -22,12 +22,18 @@ class LayerState extends State {
   static final LatLng center = const LatLng(-33.86711, 151.1947171);
 
   late MapboxMapController controller;
-  Timer? timer;
+  Timer? bikeTimer;
+  Timer? filterTimer;
+  Timer? visibilityTimer;
+  int filteredId = 0;
+  bool isVisible = true;
 
   @override
   Widget build(BuildContext context) {
     return MapboxMap(
       accessToken: MapsDemo.ACCESS_TOKEN,
+      dragEnabled: false,
+      myLocationEnabled: true,
       onMapCreated: _onMapCreated,
       onMapClick: (point, latLong) =>
           print(point.toString() + latLong.toString()),
@@ -36,6 +42,7 @@ class LayerState extends State {
         target: center,
         zoom: 11.0,
       ),
+      annotationOrder: const [],
     );
   }
 
@@ -58,9 +65,11 @@ class LayerState extends State {
   }
 
   void _onStyleLoadedCallback() async {
-    await controller.addGeoJsonSource("fills", _fills);
     await controller.addGeoJsonSource("points", _points);
     await controller.addGeoJsonSource("moving", _movingFeature(0));
+
+    //new style of adding sources
+    await controller.addSource("fills", GeojsonSourceProperties(data: _fills));
 
     await controller.addFillLayer(
       "fills",
@@ -75,6 +84,7 @@ class LayerState extends State {
         'green'
       ], fillOpacity: 0.4),
       belowLayerId: "water",
+      filter: ['==', 'id', filteredId],
     );
 
     await controller.addLineLayer(
@@ -113,31 +123,45 @@ class LayerState extends State {
     );
 
     await controller.addSymbolLayer(
-        "moving",
-        "moving",
-        SymbolLayerProperties(
-          textField: [Expressions.get, "name"],
-          textHaloWidth: 1,
-          textSize: 10,
-          textHaloColor: Colors.white.toHexStringRGB(),
-          textOffset: [
-            Expressions.literal,
-            [0, 2]
-          ],
-          iconImage: "bicycle-15",
-          iconSize: 2,
-          iconAllowOverlap: true,
-          textAllowOverlap: true,
-        ));
-    timer = Timer.periodic(
-        Duration(milliseconds: 10),
-        (t) => controller.setGeoJsonSource(
-            "moving", _movingFeature(t.tick / 2000)));
+      "moving",
+      "moving",
+      SymbolLayerProperties(
+        textField: [Expressions.get, "name"],
+        textHaloWidth: 1,
+        textSize: 10,
+        textHaloColor: Colors.white.toHexStringRGB(),
+        textOffset: [
+          Expressions.literal,
+          [0, 2]
+        ],
+        iconImage: "bicycle-15",
+        iconSize: 2,
+        iconAllowOverlap: true,
+        textAllowOverlap: true,
+      ),
+      minzoom: 11,
+    );
+
+    bikeTimer = Timer.periodic(Duration(milliseconds: 10), (t) {
+      controller.setGeoJsonSource("moving", _movingFeature(t.tick / 2000));
+    });
+
+    filterTimer = Timer.periodic(Duration(seconds: 3), (t) {
+      filteredId = filteredId == 0 ? 1 : 0;
+      controller.setFilter('fills', ['==', 'id', filteredId]);
+    });
+
+    visibilityTimer = Timer.periodic(Duration(seconds: 5), (t) {
+      isVisible = !isVisible;
+      controller.setVisibility('water', isVisible);
+    });
   }
 
   @override
   void dispose() {
-    timer?.cancel();
+    bikeTimer?.cancel();
+    filterTimer?.cancel();
+    visibilityTimer?.cancel();
     super.dispose();
   }
 }
@@ -179,7 +203,7 @@ final _fills = {
     {
       "type": "Feature",
       "id": 0, // web currently only supports number ids
-      "properties": <String, dynamic>{},
+      "properties": <String, dynamic>{'id': 0},
       "geometry": {
         "type": "Polygon",
         "coordinates": [
@@ -204,7 +228,7 @@ final _fills = {
     {
       "type": "Feature",
       "id": 1,
-      "properties": <String, dynamic>{},
+      "properties": <String, dynamic>{'id': 1},
       "geometry": {
         "type": "Polygon",
         "coordinates": [

@@ -36,6 +36,10 @@ class LatLng {
     return <double>[latitude, longitude];
   }
 
+  dynamic toGeoJsonCoordinates() {
+    return <double>[longitude, latitude];
+  }
+
   static LatLng _fromJson(List<dynamic> json) {
     return LatLng(json[0], json[1]);
   }
@@ -49,7 +53,7 @@ class LatLng {
   }
 
   @override
-  int get hashCode => hashValues(latitude, longitude);
+  int get hashCode => Object.hash(latitude, longitude);
 }
 
 /// A latitude/longitude aligned rectangle.
@@ -102,7 +106,7 @@ class LatLngBounds {
   }
 
   @override
-  int get hashCode => hashValues(southwest, northeast);
+  int get hashCode => Object.hash(southwest, northeast);
 }
 
 /// A geographical area representing a non-aligned quadrilateral
@@ -160,7 +164,7 @@ class LatLngQuad {
   }
 
   @override
-  int get hashCode => hashValues(topLeft, topRight, bottomRight, bottomLeft);
+  int get hashCode => Object.hash(topLeft, topRight, bottomRight, bottomLeft);
 }
 
 /// User's observed location

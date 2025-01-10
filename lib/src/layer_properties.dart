@@ -1750,3 +1750,631 @@ class FillLayerProperties implements LayerProperties {
     );
   }
 }
+
+class FillExtrusionLayerProperties implements LayerProperties {
+  // Paint Properties
+  /// The opacity of the entire fill extrusion layer. This is rendered on a
+  /// per-layer, not per-feature, basis, and data-driven styling is not
+  /// available.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic fillExtrusionOpacity;
+
+  /// The base color of the extruded fill. The extrusion's surfaces will be
+  /// shaded differently based on this color in combination with the root
+  /// `light` settings. If this color is specified as `rgba` with an alpha
+  /// component, the alpha component will be ignored; use
+  /// `fill-extrusion-opacity` to set layer opacity.
+  ///
+  /// Type: color
+  ///   default: #000000
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, ios, macos
+  final dynamic fillExtrusionColor;
+
+  /// The geometry's offset. Values are [x, y] where negatives indicate left
+  /// and up (on the flat plane), respectively.
+  ///
+  /// Type: array
+  ///   default: [0, 0]
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic fillExtrusionTranslate;
+
+  /// Controls the frame of reference for `fill-extrusion-translate`.
+  ///
+  /// Type: enum
+  ///   default: map
+  /// Options:
+  ///   "map"
+  ///      The fill extrusion is translated relative to the map.
+  ///   "viewport"
+  ///      The fill extrusion is translated relative to the viewport.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic fillExtrusionTranslateAnchor;
+
+  /// Name of image in sprite to use for drawing images on extruded fills.
+  /// For seamless patterns, image width and height must be a factor of two
+  /// (2, 4, 8, ..., 512). Note that zoom-dependent expressions will be
+  /// evaluated only at integer zoom levels.
+  ///
+  /// Type: resolvedImage
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, macos, ios
+  final dynamic fillExtrusionPattern;
+
+  /// The height with which to extrude this layer.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///   minimum: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, ios, macos
+  final dynamic fillExtrusionHeight;
+
+  /// The height with which to extrude the base of this layer. Must be less
+  /// than or equal to `fill-extrusion-height`.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///   minimum: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, ios, macos
+  final dynamic fillExtrusionBase;
+
+  /// Whether to apply a vertical gradient to the sides of a fill-extrusion
+  /// layer. If true, sides will be shaded slightly darker farther down.
+  ///
+  /// Type: boolean
+  ///   default: true
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, ios, macos
+  final dynamic fillExtrusionVerticalGradient;
+
+  // Layout Properties
+  /// Whether this layer is displayed.
+  ///
+  /// Type: enum
+  ///   default: visible
+  /// Options:
+  ///   "visible"
+  ///      The layer is shown.
+  ///   "none"
+  ///      The layer is not shown.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic visibility;
+
+  const FillExtrusionLayerProperties({
+    this.fillExtrusionOpacity,
+    this.fillExtrusionColor,
+    this.fillExtrusionTranslate,
+    this.fillExtrusionTranslateAnchor,
+    this.fillExtrusionPattern,
+    this.fillExtrusionHeight,
+    this.fillExtrusionBase,
+    this.fillExtrusionVerticalGradient,
+    this.visibility,
+  });
+
+  FillExtrusionLayerProperties copyWith(FillExtrusionLayerProperties changes) {
+    return FillExtrusionLayerProperties(
+      fillExtrusionOpacity:
+          changes.fillExtrusionOpacity ?? fillExtrusionOpacity,
+      fillExtrusionColor: changes.fillExtrusionColor ?? fillExtrusionColor,
+      fillExtrusionTranslate:
+          changes.fillExtrusionTranslate ?? fillExtrusionTranslate,
+      fillExtrusionTranslateAnchor:
+          changes.fillExtrusionTranslateAnchor ?? fillExtrusionTranslateAnchor,
+      fillExtrusionPattern:
+          changes.fillExtrusionPattern ?? fillExtrusionPattern,
+      fillExtrusionHeight: changes.fillExtrusionHeight ?? fillExtrusionHeight,
+      fillExtrusionBase: changes.fillExtrusionBase ?? fillExtrusionBase,
+      fillExtrusionVerticalGradient: changes.fillExtrusionVerticalGradient ??
+          fillExtrusionVerticalGradient,
+      visibility: changes.visibility ?? visibility,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = <String, dynamic>{};
+
+    void addIfPresent(String fieldName, dynamic value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent('fill-extrusion-opacity', fillExtrusionOpacity);
+    addIfPresent('fill-extrusion-color', fillExtrusionColor);
+    addIfPresent('fill-extrusion-translate', fillExtrusionTranslate);
+    addIfPresent(
+        'fill-extrusion-translate-anchor', fillExtrusionTranslateAnchor);
+    addIfPresent('fill-extrusion-pattern', fillExtrusionPattern);
+    addIfPresent('fill-extrusion-height', fillExtrusionHeight);
+    addIfPresent('fill-extrusion-base', fillExtrusionBase);
+    addIfPresent(
+        'fill-extrusion-vertical-gradient', fillExtrusionVerticalGradient);
+    addIfPresent('visibility', visibility);
+    return json;
+  }
+
+  factory FillExtrusionLayerProperties.fromJson(Map<String, dynamic> json) {
+    return FillExtrusionLayerProperties(
+      fillExtrusionOpacity: json['fill-extrusion-opacity'],
+      fillExtrusionColor: json['fill-extrusion-color'],
+      fillExtrusionTranslate: json['fill-extrusion-translate'],
+      fillExtrusionTranslateAnchor: json['fill-extrusion-translate-anchor'],
+      fillExtrusionPattern: json['fill-extrusion-pattern'],
+      fillExtrusionHeight: json['fill-extrusion-height'],
+      fillExtrusionBase: json['fill-extrusion-base'],
+      fillExtrusionVerticalGradient: json['fill-extrusion-vertical-gradient'],
+      visibility: json['visibility'],
+    );
+  }
+}
+
+class RasterLayerProperties implements LayerProperties {
+  // Paint Properties
+  /// The opacity at which the image will be drawn.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterOpacity;
+
+  /// Rotates hues around the color wheel.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterHueRotate;
+
+  /// Increase or reduce the brightness of the image. The value is the
+  /// minimum brightness.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterBrightnessMin;
+
+  /// Increase or reduce the brightness of the image. The value is the
+  /// maximum brightness.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterBrightnessMax;
+
+  /// Increase or reduce the saturation of the image.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///   minimum: -1
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterSaturation;
+
+  /// Increase or reduce the contrast of the image.
+  ///
+  /// Type: number
+  ///   default: 0
+  ///   minimum: -1
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterContrast;
+
+  /// The resampling/interpolation method to use for overscaling, also known
+  /// as texture magnification filter
+  ///
+  /// Type: enum
+  ///   default: linear
+  /// Options:
+  ///   "linear"
+  ///      (Bi)linear filtering interpolates pixel values using the weighted
+  ///      average of the four closest original source pixels creating a
+  ///      smooth but blurry look when overscaled
+  ///   "nearest"
+  ///      Nearest neighbor filtering interpolates pixel values using the
+  ///      nearest original source pixel creating a sharp but pixelated look
+  ///      when overscaled
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterResampling;
+
+  /// Fade duration when a new tile is added.
+  ///
+  /// Type: number
+  ///   default: 300
+  ///   minimum: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic rasterFadeDuration;
+
+  // Layout Properties
+  /// Whether this layer is displayed.
+  ///
+  /// Type: enum
+  ///   default: visible
+  /// Options:
+  ///   "visible"
+  ///      The layer is shown.
+  ///   "none"
+  ///      The layer is not shown.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic visibility;
+
+  const RasterLayerProperties({
+    this.rasterOpacity,
+    this.rasterHueRotate,
+    this.rasterBrightnessMin,
+    this.rasterBrightnessMax,
+    this.rasterSaturation,
+    this.rasterContrast,
+    this.rasterResampling,
+    this.rasterFadeDuration,
+    this.visibility,
+  });
+
+  RasterLayerProperties copyWith(RasterLayerProperties changes) {
+    return RasterLayerProperties(
+      rasterOpacity: changes.rasterOpacity ?? rasterOpacity,
+      rasterHueRotate: changes.rasterHueRotate ?? rasterHueRotate,
+      rasterBrightnessMin: changes.rasterBrightnessMin ?? rasterBrightnessMin,
+      rasterBrightnessMax: changes.rasterBrightnessMax ?? rasterBrightnessMax,
+      rasterSaturation: changes.rasterSaturation ?? rasterSaturation,
+      rasterContrast: changes.rasterContrast ?? rasterContrast,
+      rasterResampling: changes.rasterResampling ?? rasterResampling,
+      rasterFadeDuration: changes.rasterFadeDuration ?? rasterFadeDuration,
+      visibility: changes.visibility ?? visibility,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = <String, dynamic>{};
+
+    void addIfPresent(String fieldName, dynamic value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent('raster-opacity', rasterOpacity);
+    addIfPresent('raster-hue-rotate', rasterHueRotate);
+    addIfPresent('raster-brightness-min', rasterBrightnessMin);
+    addIfPresent('raster-brightness-max', rasterBrightnessMax);
+    addIfPresent('raster-saturation', rasterSaturation);
+    addIfPresent('raster-contrast', rasterContrast);
+    addIfPresent('raster-resampling', rasterResampling);
+    addIfPresent('raster-fade-duration', rasterFadeDuration);
+    addIfPresent('visibility', visibility);
+    return json;
+  }
+
+  factory RasterLayerProperties.fromJson(Map<String, dynamic> json) {
+    return RasterLayerProperties(
+      rasterOpacity: json['raster-opacity'],
+      rasterHueRotate: json['raster-hue-rotate'],
+      rasterBrightnessMin: json['raster-brightness-min'],
+      rasterBrightnessMax: json['raster-brightness-max'],
+      rasterSaturation: json['raster-saturation'],
+      rasterContrast: json['raster-contrast'],
+      rasterResampling: json['raster-resampling'],
+      rasterFadeDuration: json['raster-fade-duration'],
+      visibility: json['visibility'],
+    );
+  }
+}
+
+class HillshadeLayerProperties implements LayerProperties {
+  // Paint Properties
+  /// The direction of the light source used to generate the hillshading
+  /// with 0 as the top of the viewport if `hillshade-illumination-anchor`
+  /// is set to `viewport` and due north if `hillshade-illumination-anchor`
+  /// is set to `map`.
+  ///
+  /// Type: number
+  ///   default: 335
+  ///   minimum: 0
+  ///   maximum: 359
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeIlluminationDirection;
+
+  /// Direction of light source when map is rotated.
+  ///
+  /// Type: enum
+  ///   default: viewport
+  /// Options:
+  ///   "map"
+  ///      The hillshade illumination is relative to the north direction.
+  ///   "viewport"
+  ///      The hillshade illumination is relative to the top of the
+  ///      viewport.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeIlluminationAnchor;
+
+  /// Intensity of the hillshade
+  ///
+  /// Type: number
+  ///   default: 0.5
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeExaggeration;
+
+  /// The shading color of areas that face away from the light source.
+  ///
+  /// Type: color
+  ///   default: #000000
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeShadowColor;
+
+  /// The shading color of areas that faces towards the light source.
+  ///
+  /// Type: color
+  ///   default: #FFFFFF
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeHighlightColor;
+
+  /// The shading color used to accentuate rugged terrain like sharp cliffs
+  /// and gorges.
+  ///
+  /// Type: color
+  ///   default: #000000
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic hillshadeAccentColor;
+
+  // Layout Properties
+  /// Whether this layer is displayed.
+  ///
+  /// Type: enum
+  ///   default: visible
+  /// Options:
+  ///   "visible"
+  ///      The layer is shown.
+  ///   "none"
+  ///      The layer is not shown.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic visibility;
+
+  const HillshadeLayerProperties({
+    this.hillshadeIlluminationDirection,
+    this.hillshadeIlluminationAnchor,
+    this.hillshadeExaggeration,
+    this.hillshadeShadowColor,
+    this.hillshadeHighlightColor,
+    this.hillshadeAccentColor,
+    this.visibility,
+  });
+
+  HillshadeLayerProperties copyWith(HillshadeLayerProperties changes) {
+    return HillshadeLayerProperties(
+      hillshadeIlluminationDirection: changes.hillshadeIlluminationDirection ??
+          hillshadeIlluminationDirection,
+      hillshadeIlluminationAnchor:
+          changes.hillshadeIlluminationAnchor ?? hillshadeIlluminationAnchor,
+      hillshadeExaggeration:
+          changes.hillshadeExaggeration ?? hillshadeExaggeration,
+      hillshadeShadowColor:
+          changes.hillshadeShadowColor ?? hillshadeShadowColor,
+      hillshadeHighlightColor:
+          changes.hillshadeHighlightColor ?? hillshadeHighlightColor,
+      hillshadeAccentColor:
+          changes.hillshadeAccentColor ?? hillshadeAccentColor,
+      visibility: changes.visibility ?? visibility,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = <String, dynamic>{};
+
+    void addIfPresent(String fieldName, dynamic value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent(
+        'hillshade-illumination-direction', hillshadeIlluminationDirection);
+    addIfPresent('hillshade-illumination-anchor', hillshadeIlluminationAnchor);
+    addIfPresent('hillshade-exaggeration', hillshadeExaggeration);
+    addIfPresent('hillshade-shadow-color', hillshadeShadowColor);
+    addIfPresent('hillshade-highlight-color', hillshadeHighlightColor);
+    addIfPresent('hillshade-accent-color', hillshadeAccentColor);
+    addIfPresent('visibility', visibility);
+    return json;
+  }
+
+  factory HillshadeLayerProperties.fromJson(Map<String, dynamic> json) {
+    return HillshadeLayerProperties(
+      hillshadeIlluminationDirection: json['hillshade-illumination-direction'],
+      hillshadeIlluminationAnchor: json['hillshade-illumination-anchor'],
+      hillshadeExaggeration: json['hillshade-exaggeration'],
+      hillshadeShadowColor: json['hillshade-shadow-color'],
+      hillshadeHighlightColor: json['hillshade-highlight-color'],
+      hillshadeAccentColor: json['hillshade-accent-color'],
+      visibility: json['visibility'],
+    );
+  }
+}
+
+class HeatmapLayerProperties implements LayerProperties {
+  // Paint Properties
+  /// Radius of influence of one heatmap point in pixels. Increasing the
+  /// value makes the heatmap smoother, but less detailed.
+  ///
+  /// Type: number
+  ///   default: 30
+  ///   minimum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, ios, macos
+  final dynamic heatmapRadius;
+
+  /// A measure of how much an individual point contributes to the heatmap.
+  /// A value of 10 would be equivalent to having 10 points of weight 1 in
+  /// the same spot. Especially useful when combined with clustering.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  ///   data-driven styling with js, android, ios, macos
+  final dynamic heatmapWeight;
+
+  /// Similar to `heatmap-weight` but controls the intensity of the heatmap
+  /// globally. Primarily used for adjusting the heatmap based on zoom
+  /// level.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic heatmapIntensity;
+
+  /// Defines the color of each pixel based on its density value in a
+  /// heatmap.  Should be an expression that uses `["heatmap-density"]` as
+  /// input.
+  ///
+  /// Type: color
+  ///   default: [interpolate, [linear], [heatmap-density], 0, rgba(0, 0, 255, 0), 0.1, royalblue, 0.3, cyan, 0.5, lime, 0.7, yellow, 1, red]
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic heatmapColor;
+
+  /// The global opacity at which the heatmap layer will be drawn.
+  ///
+  /// Type: number
+  ///   default: 1
+  ///   minimum: 0
+  ///   maximum: 1
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic heatmapOpacity;
+
+  // Layout Properties
+  /// Whether this layer is displayed.
+  ///
+  /// Type: enum
+  ///   default: visible
+  /// Options:
+  ///   "visible"
+  ///      The layer is shown.
+  ///   "none"
+  ///      The layer is not shown.
+  ///
+  /// Sdk Support:
+  ///   basic functionality with js, android, ios, macos
+  final dynamic visibility;
+
+  const HeatmapLayerProperties({
+    this.heatmapRadius,
+    this.heatmapWeight,
+    this.heatmapIntensity,
+    this.heatmapColor,
+    this.heatmapOpacity,
+    this.visibility,
+  });
+
+  HeatmapLayerProperties copyWith(HeatmapLayerProperties changes) {
+    return HeatmapLayerProperties(
+      heatmapRadius: changes.heatmapRadius ?? heatmapRadius,
+      heatmapWeight: changes.heatmapWeight ?? heatmapWeight,
+      heatmapIntensity: changes.heatmapIntensity ?? heatmapIntensity,
+      heatmapColor: changes.heatmapColor ?? heatmapColor,
+      heatmapOpacity: changes.heatmapOpacity ?? heatmapOpacity,
+      visibility: changes.visibility ?? visibility,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> json = <String, dynamic>{};
+
+    void addIfPresent(String fieldName, dynamic value) {
+      if (value != null) {
+        json[fieldName] = value;
+      }
+    }
+
+    addIfPresent('heatmap-radius', heatmapRadius);
+    addIfPresent('heatmap-weight', heatmapWeight);
+    addIfPresent('heatmap-intensity', heatmapIntensity);
+    addIfPresent('heatmap-color', heatmapColor);
+    addIfPresent('heatmap-opacity', heatmapOpacity);
+    addIfPresent('visibility', visibility);
+    return json;
+  }
+
+  factory HeatmapLayerProperties.fromJson(Map<String, dynamic> json) {
+    return HeatmapLayerProperties(
+      heatmapRadius: json['heatmap-radius'],
+      heatmapWeight: json['heatmap-weight'],
+      heatmapIntensity: json['heatmap-intensity'],
+      heatmapColor: json['heatmap-color'],
+      heatmapOpacity: json['heatmap-opacity'],
+      visibility: json['visibility'],
+    );
+  }
+}

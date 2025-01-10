@@ -64,12 +64,29 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
     );
   }
 
+  /// Update an asset image as a source to the currently displayed style
+  Future<void> updateImageSourceFromAsset(
+      String imageSourceId, String assetName) async {
+    final ByteData bytes = await rootBundle.load(assetName);
+    final Uint8List list = bytes.buffer.asUint8List();
+    return controller.updateImageSource(
+      imageSourceId,
+      list,
+      const LatLngQuad(
+        bottomRight: LatLng(-33.89884564291081, 151.25229835510254),
+        bottomLeft: LatLng(-33.89884564291081, 151.20131492614746),
+        topLeft: LatLng(-33.934601369931634, 151.20131492614746),
+        topRight: LatLng(-33.934601369931634, 151.25229835510254),
+      ),
+    );
+  }
+
   Future<void> removeImageSource(String imageSourceId) {
     return controller.removeSource(imageSourceId);
   }
 
   Future<void> addLayer(String imageLayerId, String imageSourceId) {
-    if(layerAdded) {
+    if (layerAdded) {
       removeLayer(imageLayerId);
     }
     setState(() => layerAdded = true);
@@ -78,11 +95,12 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
 
   Future<void> addLayerBelow(
       String imageLayerId, String imageSourceId, String belowLayerId) {
-    if(layerAdded) {
+    if (layerAdded) {
       removeLayer(imageLayerId);
     }
     setState(() => layerAdded = true);
-    return controller.addImageLayerBelow(imageLayerId, imageSourceId, belowLayerId);
+    return controller.addImageLayerBelow(
+        imageLayerId, imageSourceId, belowLayerId);
   }
 
   Future<void> removeLayer(String imageLayerId) {
@@ -96,17 +114,14 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Center(
-          child: SizedBox(
-            width: 300.0,
-            height: 200.0,
-            child: MapboxMap(
-              accessToken: MapsDemo.ACCESS_TOKEN,
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(-33.852, 151.211),
-                zoom: 11.0,
-              ),
+        SizedBox(
+          height: 300.0,
+          child: MapboxMap(
+            accessToken: MapsDemo.ACCESS_TOKEN,
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(-33.852, 151.211),
+              zoom: 10.0,
             ),
           ),
         ),
@@ -124,6 +139,18 @@ class PlaceSymbolBodyState extends State<PlaceSymbolBody> {
                           : () {
                               addImageSourceFromAsset(
                                       SOURCE_ID, 'assets/sydney.png')
+                                  .then((value) {
+                                setState(() => sourceAdded = true);
+                              });
+                            },
+                    ),
+                    TextButton(
+                      child: const Text('Update source (asset image)'),
+                      onPressed: !sourceAdded
+                          ? null
+                          : () {
+                              updateImageSourceFromAsset(SOURCE_ID,
+                                      'assets/symbols/custom-icon.png')
                                   .then((value) {
                                 setState(() => sourceAdded = true);
                               });

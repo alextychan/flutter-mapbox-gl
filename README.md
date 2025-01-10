@@ -4,44 +4,116 @@
 > 
 > We welcome [feedback](https://github.com/tobrun/flutter-mapbox-gl/issues) and contributions.
 
+
+## Table of contents
+
+- [Flutter Mapbox GL](#flutter-mapbox-gl)
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Setting up](#setting-up)
+    - [Mobile](#mobile)
+      - [Secret Mapbox access token](#secret-mapbox-access-token)
+    - [Web](#web)
+    - [All platforms](#all-platforms)
+      - [Public Mapbox access token](#public-mapbox-access-token)
+  - [Supported API](#supported-api)
+  - [Map Styles](#map-styles)
+  - [Offline Sideloading](#offline-sideloading)
+  - [Downloading Offline Regions](#downloading-offline-regions)
+  - [Create a static map snapshot](#create-a-static-map-snapshot)
+  - [Location features](#location-features)
+    - [Android](#android)
+    - [iOS](#ios)
+  - [Running the example code](#running-the-example-code)
+  - [Contributing](#contributing)
+
+## Introduction
+
 This Flutter plugin allows to show embedded interactive and customizable vector maps inside a Flutter widget. For the Android and iOS integration, we use [mapbox-gl-native](https://github.com/mapbox/mapbox-gl-native). For web, we rely on [mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js). This project only supports a subset of the API exposed by these libraries. 
 
 ![screenshot.png](screenshot.png)
 
+## Setting up
 
-## How to use
+This package is available on [pub.dev](https://pub.dev/packages/mapbox_gl).
 
-This project is available on [pub.dev](https://pub.dev/packages/mapbox_gl), follow the [instructions](https://flutter.dev/docs/development/packages-and-plugins/using-packages#adding-a-package-dependency-to-an-app) to add a package into your flutter application. 
+Get it by running the following command:
 
-### Private Mapbox access token
+```
+flutter pub add mapbox_gl
+```
 
-This project does require a Mapbox access token to download the underlying Android/iOS SDKs. The secret access token must have the *Download: read* scope for
-[Android](https://docs.mapbox.com/android/maps/guides/install/) and/or 
+### Mobile
+
+#### Secret Mapbox access token
+
+A secret access token with the `Downloads: Read` scope is required for the underlying Mapbox SDKs to be downloaded.
+Information on setting it up is available in the Mapbox documentation:
+[Android](https://docs.mapbox.com/android/maps/guides/install/),
 [iOS](https://docs.mapbox.com/ios/maps/guides/install/).
 
-If this configuration is not present, an error like the following appears during 
-the build process:
+If the properly configured token is not present,
+the build process fails with one the following errors *(for Android/iOS respectively)*:
 
-#### Android
 ```
 * What went wrong:
 A problem occurred evaluating project ':mapbox_gl'.
 > SDK Registry token is null. See README.md for more information.
 ```
 
-#### iOS
 ```
 [!] Error installing Mapbox-iOS-SDK
 curl: (22) The requested URL returned error: 401 Unauthorized
 ```
 
-### Public Mapbox access token
+### Web
 
-Next to a private access token you will need to provide an public access token
-to retrieve the style and underlying resources. This can be done with running your application with an additional define statement:
+Include the JavaScript and CSS files in the `<head>` of your `index.html` file:
 
 ```
-flutter run -d {device_id} --dart-define=ACCESS_TOKEN=ADD_YOUR_TOKEN_HERE`
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css' rel='stylesheet' />
+
+<style>
+   .mapboxgl-map {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+</style>
+```
+
+*Note: Look for latest version in [Mapbox GL JS documentation](https://docs.mapbox.com/mapbox-gl-js/guides/).*
+
+### All platforms
+
+#### Public Mapbox access token
+
+A public access token must be provided to a MapboxMap widget for retrieving styles and resources.
+While you can hardcode it directly into source files,
+it's good practise to retrieve access tokens from some external source
+(e.g. a config file or an environment variable).
+The example app uses the following technique:
+
+The access token is passed via the command line arguments when either building
+
+```
+flutter build <platform> --dart-define ACCESS_TOKEN=YOUR_TOKEN_HERE
+```
+
+or running the application
+
+```
+flutter run --dart-define ACCESS_TOKEN=YOUR_TOKEN_HERE
+```
+
+Then it's retrieved in Dart:
+```
+MapboxMap(
+  ...
+  accessToken: const String.fromEnvironment("ACCESS_TOKEN"),
+  ...
+)
 ```
 
 ## Supported API
@@ -53,13 +125,16 @@ flutter run -d {device_id} --dart-define=ACCESS_TOKEN=ADD_YOUR_TOKEN_HERE`
 | Gesture | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | User Location | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Style DSL   | :x:  | :x:  | :x:  |
-| Raster Layer  | :x:  | :x:  | :x: | 
+| Raster Layer  | :white_check_mark:  | :white_check_mark:  | :white_check_mark: | 
 | Symbol Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Circle Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Line Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Fill Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Vector Source   |  :x:  | :x:  | :x:  |
-| Raster Source  |  :x:  | :x:  | :x:  |   |   |   |   |
+| Fill Extrusion Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Hillshade Layer | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Heatmap Layer   | :white_check_mark:  | :white_check_mark:  | :white_check_mark:  |
+| Vector Source   |  :white_check_mark:  | :white_check_mark:  | :white_check_mark:  |
+| Raster Source  |  :white_check_mark:  | :white_check_mark:  | :white_check_mark:  |
 | GeoJson Source  | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Image Source   | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Expressions   |  :white_check_mark:   | :white_check_mark: | :white_check_mark: |
@@ -133,7 +208,25 @@ An offline region is a defined region of a map that is available for use in cond
 
     downloadOfflineRegionStream(offlineRegion, onEvent);
 ```
+## Create a static map snapshot
 
+The snapshotManager generates static raster images of the map.
+Each snapshot image depicts a portion of a map defined by an SnapshotOptions object you provide.
+
+* Call `takeSnapshot` with predefined `SnapshotOptions`
+
+```   
+    final renderBox = mapKey.currentContext?.findRenderObject() as RenderBox;
+
+    final snapshotOptions = SnapshotOptions(
+      width: renderBox.size.width,
+      height: renderBox.size.height,
+      writeToDisk: true,
+      withLogo: false,
+    );
+    
+    final uri = await mapController?.takeSnapshot(snapshotOptions);
+```   
 
 ## Location features
 ### Android
@@ -159,6 +252,11 @@ xml ...
 
 [Recommended](https://docs.mapbox.com/help/tutorials/first-steps-ios-sdk/#display-the-users-location)  explanation about "Shows your location on the map and helps improve the map".
 
+## Flutter 3.x.x issues and experimental workarounds
+Since Flutter 3.x.x was introduced, it exposed some race conditions resulting in occasional crashes upon map disposal. The parameter `useDelayedDisposal` was introduced as a workaround for this issue until Flutter and/or Mapbox fix this issue properly. Use with caution - this is not yet production ready since several users still report crashes after using this workaround.
+
+## Running the example code
+See the [documentation about this topic](doc/RUNNING_EXAMPLE_CODE.md)
 
 ## Contributing
 
